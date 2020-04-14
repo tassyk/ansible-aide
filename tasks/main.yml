@@ -1,0 +1,31 @@
+---
+# tasks file for ansible-aide
+
+
+- name: install aide package
+  yum:
+    name: aide
+    state: present
+  tags: install
+
+- template:
+    src: costum_aide.conf.j2
+    dest: "/etc/aide.conf"
+  when: costum_config is defind and costum_config 
+  tags: conf
+
+- name: initilize aide db
+  action: command /sbin/aide --init -c /etc/aide.conf
+  tags: init,db
+
+- name: mv db file
+  action: command /bin/mv "{{db_dir/aide.db.new.gz}}" "{{db_dir/aide.db.gz}}"
+
+#- name:  Add crontab to check integrity nightly
+#  cron:
+#    name: "nightly check"
+#    hour: "01"
+#    minute: "0"
+#    job: "/sbin/aide --check -c /etc/aide.conf >> aide-check-$(hostname)-$(date "%m%d%Y")" 
+#  tags:
+#   - cron,check

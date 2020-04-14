@@ -1,0 +1,182 @@
+# Example configuration file for AIDE.
+
+@@define DBDIR {{db_dir | default('/var/lib/aide')}}
+@@define LOGDIR {{log_dir | default('/var/log/aide')}}
+
+# The location of the database to be read.
+database=file:@@{DBDIR}/aide.db.gz
+
+# The location of the database to be written.
+#database_out=sql:host:port:database:login_name:passwd:table
+#database_out=file:aide.db.new
+database_out=file:@@{DBDIR}/aide.db.new.gz
+
+# Whether to gzip the output to database.
+gzip_dbout=yes
+
+# Default.
+verbose=5
+
+report_url=file:@@{LOGDIR}/aide.log
+report_url=stdout
+
+
+# For directories, don't bother doing hashes.
+DIR = p+i+n+u+g+acl+selinux+xattrs
+
+# Access control only.
+PERMS = p+u+g+acl+selinux+xattrs
+
+# Logfiles only check access w/o xattrs.
+LOG = p+u+g+n+acl+selinux+ftype
+
+# Access + inode changes + file type.
+STATIC = p+u+g+acl+selinux+xattrs+i+n+b+c+ftype
+
+# Logfiles only check access w/o xattrs.
+LOG = p+u+g+n+acl+selinux+ftype
+
+# Content + file type.
+ CONTENT = sha256+ftype
+
+# Extended content + file type + access.
+CONTENT_EX = sha256+ftype+p+u+g+n+acl+selinux+xattrs
+
+# Some files get updated automatically, so the inode/ctime/mtime change
+# but we want to know when the data inside them changes.
+DATAONLY =  p+n+u+g+s+acl+selinux+xattrs+sha256
+
+# Next decide what directories/files you want in the database. Aide
+# uses a first match system. Put file specific instructions before generic
+# matches. e.g. Put file matches before directories.
+
+/boot/   CONTENT_EX
+/bin/    CONTENT_EX
+/sbin/   CONTENT_EX
+/lib/    CONTENT_EX
+
+# Admin's dot files constantly change, just check perms.
+/root/\..* PERMS
+
+# trusted databases
+/etc/hosts$ CONTENT_EX
+/etc/host.conf$ CONTENT_EX
+/etc/hostname$ CONTENT_EX
+/etc/issue$ CONTENT_EX
+/etc/issue.net$ CONTENT_EX
+/etc/protocols$ CONTENT_EX
+/etc/services$ CONTENT_EX
+/etc/localtime$ CONTENT_EX
+/etc/exports$  CONTENT_EX
+/etc/fstab$    CONTENT_EX
+/etc/passwd$   CONTENT_EX
+/etc/group$    CONTENT_EX
+/etc/gshadow$  CONTENT_EX
+/etc/shadow$   CONTENT_EX
+/etc/security/opasswd$   CONTENT_EX
+
+# networking
+/etc/firewalld/ CONTENT_EX
+/etc/NetworkManager/ CONTENT_EX
+/etc/networks$ CONTENT_EX
+/etc/dhcp/ CONTENT_EX
+/etc/resolv.conf$ DATAONLY
+
+# logins and accounts
+/etc/login.defs$ CONTENT_EX
+/etc/libuser.conf$ CONTENT_EX
+/var/log/faillog$ PERMS
+/var/log/lastlog$ PERMS
+/var/run/faillock/ PERMS
+/etc/pam.d/ CONTENT_EX
+/etc/security$ CONTENT_EX
+/etc/securetty$ CONTENT_EX
+/etc/sudo.conf$ CONTENT_EX
+/etc/sudoers$ CONTENT_EX
+/etc/sudoers.d/ CONTENT_EX
+
+# Shell/X starting files
+/etc/profile$ CONTENT_EX
+/etc/profile.d/ CONTENT_EX
+/etc/bashrc$ CONTENT_EX
+/etc/bash_completion.d/ CONTENT_EX
+/etc/shells$ CONTENT_EX
+
+# Pkg manager
+/etc/yum.conf$ CONTENT_EX
+/etc/yum/ CONTENT_EX
+
+# auditing
+# AIDE produces an audit record, so this becomes perpetual motion.
+# /var/log/audit/ PERMS+ANF+ARF
+/etc/audit/ CONTENT_EX
+/etc/audisp/ CONTENT_EX
+/etc/libaudit.conf$ CONTENT_EX
+/etc/aide.conf$  CONTENT_EX
+
+# System logs
+/etc/rsyslog.conf$ CONTENT_EX
+/etc/rsyslog.d/ CONTENT_EX
+/etc/logrotate.conf$ CONTENT_EX
+/etc/logrotate.d/ CONTENT_EX
+
+# secrets
+/etc/pkcs11/ CONTENT_EX
+/etc/pki/ CONTENT_EX
+/etc/ssl/ CONTENT_EX
+/etc/certmonger/ CONTENT_EX
+
+# init system
+/etc/systemd/ CONTENT_EX
+/etc/sysconfig/ CONTENT_EX
+
+# boot config
+/etc/grub.d/ CONTENT_EX
+/etc/grub2.cfg$ CONTENT_EX
+
+# kernel config
+/etc/sysctl.conf$ CONTENT_EX
+/etc/sysctl.d/ CONTENT_EX
+/etc/modprobe.d/ CONTENT_EX
+/etc/modules-load.d/ CONTENT_EX
+/etc/depmod.d/ CONTENT_EX
+/etc/udev/ CONTENT_EX
+/etc/crypttab$ CONTENT_EX
+
+#### Daemons ####
+
+# cron jobs
+/etc/cron.allow$ CONTENT_EX
+/etc/cron.deny$ CONTENT_EX
+/etc/cron.d/ CONTENT_EX
+/etc/cron.daily/ CONTENT_EX
+/etc/cron.hourly/ CONTENT_EX
+/etc/cron.monthly/ CONTENT_EX
+/etc/cron.weekly/ CONTENT_EX
+/etc/crontab$ CONTENT_EX
+
+# time keeping
+/etc/ntp.conf$ CONTENT_EX
+/etc/ntp/ CONTENT_EX
+/etc/chrony.conf$ CONTENT_EX
+
+# ssh
+/etc/ssh/sshd_config$ CONTENT_EX
+/etc/ssh/ssh_config$ CONTENT_EX
+
+# stunnel
+/etc/stunnel/ CONTENT_EX
+
+# web server
+/etc/httpd/ CONTENT_EX
+
+# dns
+/etc/named/ CONTENT_EX
+/etc/named.conf$ CONTENT_EX
+
+# xinetd
+/etc/xinetd.d/ CONTENT_EX
+
+# Now everything else in /etc.
+/etc/    PERMS
+
