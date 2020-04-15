@@ -27,7 +27,7 @@
   tags: db
 
 - template:
-    src: scripts/aidechk.sh.j2
+    src: scripts/aidecheck.sh.j2
     dest: "/usr/local/bin/aidecheck.sh"
     mode: '0744'
   when: check is defined and check
