@@ -11,7 +11,7 @@
 - template:
     src: config/costum_aide.conf.j2
     dest: "{{config_file}}"
-    bacup: yes
+    backup: yes
   when: costum_config is defined and costum_config 
   tags: conf
 
