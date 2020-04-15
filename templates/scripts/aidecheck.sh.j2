@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+DATE=$(date "%m%d%Y")
+report_file="{{log_dir}}/aide-report-$DATE.log"
+configfile={{config_file | default('/etc/aide.conf')}} 
+dbdir={{db_dir | default('/var/lib/aide')}}
+aidecmd=$(which aide)
+
+echo "---------- Aide check $(date) ----------------" >> $report_file
+$aidecmd --check -c $configfile >> $report_file
+
+
+echo "------ Aide update ------" >> $report_file
+$aidecmd --update -c $configfile
+mv $dbdir/aide.db.new.gz $dbdir/aide.db.gz
+
+

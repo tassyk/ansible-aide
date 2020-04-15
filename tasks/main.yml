@@ -9,23 +9,34 @@
   tags: install
 
 - template:
-    src: costum_aide.conf.j2
-    dest: "/etc/aide.conf"
-  when: costum_config is defind and costum_config 
+    src: config/costum_aide.conf.j2
+    dest: "{{config_file}}"
+  when: costum_config is defined and costum_config 
   tags: conf
 
 - name: initilize aide db
-  action: command /sbin/aide --init -c /etc/aide.conf
+  command: /sbin/aide --init -c "{{config_file}}"
   tags: init,db
 
-- name: mv db file
-  action: command /bin/mv "{{db_dir/aide.db.new.gz}}" "{{db_dir/aide.db.gz}}"
+- debug:
+    var: db_dir
+  tags: deb
 
-#- name:  Add crontab to check integrity nightly
-#  cron:
-#    name: "nightly check"
-#    hour: "01"
-#    minute: "0"
-#    job: "/sbin/aide --check -c /etc/aide.conf >> aide-check-$(hostname)-$(date "%m%d%Y")" 
-#  tags:
-#   - cron,check
+- name: move db file
+  command: /bin/cp "{{db_dir}}"/aide.db.new.gz "{{db_dir}}"/aide.db.gz
+  tags: db
+
+- template:
+    src: scripts/aidechk.sh.j2
+    dest: "/usr/local/bin/aidecheck.sh"
+    mode: '0744'
+  when: check is defined and check
+  tags: check
+
+- name:  Add crontab to check integrity nightly
+  cron:
+    name: "nightly check"
+    hour: "01"
+    minute: "0"
+    job: "/usr/local/bin/aidecheck.sh" 
+  tags: cron,check

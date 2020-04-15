@@ -2,6 +2,8 @@
 # defaults file for ansible-aide
 
 
-costum_config: False
+costum_config: True
 db_dir: "/var/lib/aide"
 log_dir: "/var/log/aide"
+config_file: "/etc/aide.conf"
+check: True
