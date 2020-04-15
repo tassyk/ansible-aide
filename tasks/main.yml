@@ -19,10 +19,6 @@
   command: /sbin/aide --init -c "{{config_file}}"
   tags: init,db
 
-- debug:
-    var: db_dir
-  tags: deb
-
 - name: move db file
   command: /bin/cp "{{db_dir}}"/aide.db.new.gz "{{db_dir}}"/aide.db.gz
   tags: db
