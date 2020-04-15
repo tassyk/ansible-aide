@@ -14,11 +14,11 @@ Role Variables
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Les variables sont:
-- costum_config: pour accepter ou non le modèle de fichier de configuration (à adapter au besoin)
+- costum_config (default: True): pour accepter ou non le modèle de fichier de configuration (à adapter au besoin)
 - db_dir: spécifie le répertoire de la base de données d'AIDE (pour le modèle de fichier de configuration)
 - log_dir: spécifie le répertoire des logs d'AIDE (pour le modèle de fichier de configuration)
 - config_file: specifie le chemin du fichier de configuration (pour le modèle de fichier de configuration)
-- check: indique si oui/non on installe le script de vérification et crée une tâche de cron pour son lancement automatique
+- check (default: True): indique si oui/non on installe le script de vérification et crée une tâche de cron pour son lancement automatique
 
 Remarque: 
 - si le modèle du fichier de configuration n'est pas choisi, AIDE est installé avec les paramètres par défaut (comme dans le cas d'une installation manuelle)
