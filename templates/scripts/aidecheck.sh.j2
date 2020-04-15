@@ -1,5 +1,12 @@
 #!/bin/sh
 
+#---------------------------------------------------------
+# script de check et update automatique de la bd aide    #
+# - vérifie la bd puis la met à jour                     #
+# - enregistre les résultats des actions dans un fichier #
+# - change la bd courante par la nouvelle                #
+#--------------------------------------------------------#
+
 
 DATE=$(date +"%m%d%Y")
 report_file="{{log_dir}}/aide-report-$DATE.log"
