@@ -31,7 +31,7 @@
     dest: "/usr/local/bin/aidecheck.sh"
     mode: '0744'
   when: check is defined and check
-  tags: check
+  tags: check,script
 
 - name:  Add crontab to check integrity nightly
   cron:
@@ -40,3 +40,4 @@
     minute: "0"
     job: "/usr/local/bin/aidecheck.sh" 
   tags: cron,check
+  when: check is defined and check

@@ -15,9 +15,11 @@ dbdir={{db_dir | default('/var/lib/aide')}}
 aidecmd=$(which aide)
 
 echo "---------- Aide check $(date) ----------------" >> $report_file
+echo >> $report_file
 $aidecmd --check -c $configfile >> $report_file
 
-
+echo >> $report_file
+echo >> $report_file
 echo "------ Aide update ------" >> $report_file
 $aidecmd --update -c $configfile >> $report_file
 /bin/mv $dbdir/aide.db.new.gz $dbdir/aide.db.gz
