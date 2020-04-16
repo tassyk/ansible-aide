@@ -1,7 +1,7 @@
 # Example configuration file for AIDE.
 
-@@define DBDIR /var/lib/aide
-@@define LOGDIR /var/log/aide
+@@define DBDIR {{aide_db_dir | default('/var/lib/aide')}}
+@@define LOGDIR {{aide_log_dir | default('/var/log/aide')}}
 
 # The location of the database to be read.
 database=file:@@{DBDIR}/aide.db.gz
@@ -17,8 +17,14 @@ gzip_dbout=yes
 # Default.
 verbose=5
 
+{% if aide_report_url is defined and aide_report_url %}
+{% for report_url in aide_report_url %}
+report_url={{ report_url }}
+{% endfor %}
+{%else %}
 report_url=file:@@{LOGDIR}/aide.log
 report_url=stdout
+{% endif %}
 #report_url=stderr
 #NOT IMPLEMENTED report_url=mailto:root@foo.com
 #NOT IMPLEMENTED report_url=syslog:LOG_AUTH
@@ -91,6 +97,7 @@ CONTENT_EX = sha256+ftype+p+u+g+n+acl+selinux+xattrs
 # Some files get updated automatically, so the inode/ctime/mtime change
 # but we want to know when the data inside them changes.
 DATAONLY =  p+n+u+g+s+acl+selinux+xattrs+sha256
+
 
 # Next decide what directories/files you want in the database. Aide
 # uses a first match system. Put file specific instructions before generic

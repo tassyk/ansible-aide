@@ -1,8 +1,19 @@
 ---
 # defaults file for ansible-aide
 
-costum_config: True
-db_dir: "/var/lib/aide"
-log_dir: "/var/log/aide"
-config_file: "/etc/aide.conf"
-check: True
+aide_costum_config: False
+aide_db_dir: "/var/lib/aide"
+aide_log_dir: "/var/log/aide"
+aide_config_file: "/etc/aide.conf"
+check: False
+
+
+# autres variables
+# aide_report_url:
+#  - report_url=file:@@{LOGDIR}/aide.log
+#  - report_url=yslog:LOG_LOCAL6
+
+#aide_monitoring_list:
+# - "/boot/   CONTENT_EX"
+# - "/etc/passwd$   CONTENT_EX"
+

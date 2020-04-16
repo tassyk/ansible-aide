@@ -13,15 +13,21 @@ Role Variables
 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
-Les variables sont:
-- costum_config (default: True): pour accepter ou non le modèle de fichier de configuration (à adapter au besoin)
-- db_dir: spécifie le répertoire de la base de données d'AIDE (pour le modèle de fichier de configuration)
-- log_dir: spécifie le répertoire des logs d'AIDE (pour le modèle de fichier de configuration)
-- config_file: specifie le chemin du fichier de configuration (pour le modèle de fichier de configuration)
-- check (default: True): indique si oui/non on installe le script de vérification et crée une tâche de cron pour son lancement automatique
+**Les variables sont :**
+- aide_costum_config (default: False): pour accepter ou non le modèle de fichier de configuration (à adapter au besoin)
+- aide_db_dir: spécifie le répertoire de la base de données d'AIDE (pour le modèle de fichier de configuration)
+- aide_log_dir: spécifie le répertoire des logs d'AIDE (pour le modèle de fichier de configuration)
+- aide_config_file: specifie le chemin du fichier de configuration (pour le modèle de fichier de configuration)
+- check (default: False): indique si oui/non on installe le script de vérification et crée une tâche de cron pour son lancement automatique
+
+**Autres variables :**
+Remarque: voir les exemples dans defaults/main.yml
+- report_url : liste des sorties de log. 
+- aide_monitoring_list (pour costum_config uniquement): liste des fichiers/répertoires à monitorer avec leurs règles associées. Exemple :
+  
 
 Remarque: 
-- si le modèle du fichier de configuration n'est pas choisi, AIDE est installé avec les paramètres par défaut (comme dans le cas d'une installation manuelle)
+- si (aide_costum_config est False), AIDE est installé avec les paramètres par défaut (comme dans le cas d'une installation manuelle). Mais même dans ce cas, quelques options peuvent être personnalisées comme: report_url, LOGDIR, DBDIR
 
 
 Dependencies

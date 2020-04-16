@@ -9,9 +9,9 @@
 
 
 DATE=$(date +"%Y%m%d")
-report_file="{{log_dir}}/aide-report-$DATE.log"
-configfile={{config_file | default('/etc/aide.conf')}} 
-dbdir={{db_dir | default('/var/lib/aide')}}
+report_file="{{aide_log_dir}}/aide-report-$DATE.log"
+configfile={{aide_config_file | default('/etc/aide.conf')}} 
+dbdir={{aide_db_dir | default('/var/lib/aide')}}
 aidecmd=$(which aide)
 
 echo "---------- Aide check $(date) ----------------" >> $report_file

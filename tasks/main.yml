@@ -8,19 +8,28 @@
     state: present
   tags: install
 
-- template:
+- name: Copy aide config (costum)
+  template:
     src: config/costum_aide.conf.j2
-    dest: "{{config_file}}"
+    dest: "{{aide_config_file}}"
     backup: yes
-  when: costum_config is defined and costum_config 
+  when: aide_costum_config is defined and aide_costum_config 
+  tags: conf
+
+- name: Copy aide config (complete)
+  template:
+    src: config/aide.conf.j2
+    dest: "{{aide_config_file}}"
+    backup: yes
+  when: aide_costum_config is not defined or not aide_costum_config
   tags: conf
 
 - name: initilize aide db
-  command: /sbin/aide --init -c "{{config_file}}"
+  command: /sbin/aide --init -c "{{aide_config_file}}"
   tags: init,db
 
 - name: move db file
-  command: /bin/cp "{{db_dir}}"/aide.db.new.gz "{{db_dir}}"/aide.db.gz
+  command: /bin/cp "{{aide_db_dir}}"/aide.db.new.gz "{{aide_db_dir}}"/aide.db.gz
   tags: db
 
 - template:
