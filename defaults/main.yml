@@ -9,6 +9,11 @@ check: False
 
 
 # autres variables
+aide_cron_job:
+ - name: "Aide check every 10 min"
+   minute: "*/10"
+   job: "/usr/local/bin/aidecheck.sh"
+
 # aide_report_url:
 #  - file:@@{LOGDIR}/aide.log
 #  - yslog:LOG_LOCAL6
