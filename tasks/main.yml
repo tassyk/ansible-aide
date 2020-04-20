@@ -20,7 +20,7 @@
   template:
     src: config/aide.conf.j2
     dest: "{{aide_config_file}}"
-    backup: yes
+    #backup: yes
   when: aide_costum_config is not defined or not aide_costum_config
   tags: conf
 
