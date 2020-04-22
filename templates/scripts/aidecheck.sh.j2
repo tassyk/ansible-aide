@@ -13,15 +13,21 @@ report_file="{{aide_log_dir}}/aide-report-$DATE.log"
 configfile={{aide_config_file | default('/etc/aide.conf')}} 
 dbdir={{aide_db_dir | default('/var/lib/aide')}}
 aidecmd=$(which aide)
+allok="All files match AIDE database. Looks okay!"
 
 echo "---------- Aide check $(date) ----------------" >> $report_file
 echo >> $report_file
-$aidecmd --check -c $configfile >> $report_file
+result=$($aidecmd --check -c $configfile)
+# save the result
+echo $result >> $report_file
 
-echo >> $report_file
-echo >> $report_file
-echo "------ Aide update ------" >> $report_file
-$aidecmd --update -c $configfile >> $report_file
-/bin/mv $dbdir/aide.db.new.gz $dbdir/aide.db.gz
-
+# update the db if it changes
+if [[ ! $result =~ $allok ]]
+then
+  echo >> $report_file
+  echo >> $report_file
+  echo "------ Aide update ------" >> $report_file
+  $aidecmd --update -c $configfile >> $report_file
+  /bin/mv $dbdir/aide.db.new.gz $dbdir/aide.db.gz
+fi
 

@@ -20,7 +20,7 @@
   template:
     src: config/aide.conf.j2
     dest: "{{aide_config_file}}"
-    backup: yes
+    #backup: yes
   when: aide_costum_config is not defined or not aide_costum_config
   tags: conf
 
@@ -41,9 +41,17 @@
 
 - name:  Add crontab to check integrity nightly
   cron:
-    name: "nightly check"
-    hour: "01"
-    minute: "0"
-    job: "/usr/local/bin/aidecheck.sh" 
+    name: "{{item.name | default('Aide check for every 59 min')}}"
+    hour: "{{item.hour | default('omit')}}"
+    minute: "{{item.minute | default('59')}}"
+    day: "{{item.day | default('omit')}}"
+    month: "{{item.month | default('omit')}}"
+    weekday: "{{item.weekday | default('omit')}}"
+    job: "{{item.job | default('/usr/local/bin/aidecheck.sh')}}"
+    state: "{{item.state | default('present')}}"
+    user: "{{item.user | default('omit')}}"
+    cron_file: "{{item.cron_file | default('omit')}}"
+  with_items:
+   - "{{ aide_cron_job }}" 
   tags: cron,check
   when: check is defined and check
